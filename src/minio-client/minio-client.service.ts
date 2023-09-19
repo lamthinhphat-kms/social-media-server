@@ -9,6 +9,7 @@ import { MinioService } from 'nestjs-minio-client';
 import { Stream } from 'stream';
 import { BufferedFile } from './file.model';
 import * as crypto from 'crypto';
+import { FileUploadDto } from 'src/file-upload/file-upload.dto';
 
 @Injectable()
 export class MinioClientService {
@@ -25,33 +26,40 @@ export class MinioClientService {
 
   public async upload(
     file: BufferedFile,
+    fileUploadDto: FileUploadDto,
     baseBucket: string = this.baseBucket,
   ) {
     try {
-      if (!(file.mimetype.includes('jpeg') || file.mimetype.includes('png'))) {
+      if (
+        !(
+          file.mimetype.includes('jpeg') ||
+          file.mimetype.includes('png') ||
+          file.mimetype.includes('jpg')
+        )
+      ) {
         throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST);
       }
-      //   let temp_filename = Date.now().toString();
-      //   let hashedFileName = crypto
-      //     .createHash('md5')
-      //     .update(temp_filename)
-      //     .digest('hex');
       let ext = file.originalname.substring(
         file.originalname.lastIndexOf('.'),
         file.originalname.length,
       );
       const metaData = {
         'Content-Type': file.mimetype,
-        'X-Amz-Meta-Testing': 1234,
       };
       //   let filename = hashedFileName + ext;
-      const fileName: string = `avatar/${'testing'}${ext}`;
+      const fileName: string = `${fileUploadDto.pathName}/${
+        fileUploadDto.userId
+      }/${file.originalname.substring(
+        0,
+        file.originalname.lastIndexOf('.'),
+      )}${ext}`;
       const fileBuffer = file.buffer;
       await this.client.putObject(baseBucket, fileName, fileBuffer, metaData);
       return {
-        url: `${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${process.env.MINIO_BUCKET}/${fileName}`,
+        imageUrl: `${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${process.env.MINIO_BUCKET}/${fileName}`,
       };
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
