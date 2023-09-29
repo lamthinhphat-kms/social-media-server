@@ -56,7 +56,11 @@ export class MinioClientService {
       const fileBuffer = file.buffer;
       await this.client.putObject(baseBucket, fileName, fileBuffer, metaData);
       return {
-        imageUrl: `${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${process.env.MINIO_BUCKET}/${fileName}`,
+        imageUrl: `${
+          process.env.MINIO_ENDPOINT === 'host.docker.internal'
+            ? 'localhost'
+            : process.env.MINIO_ENDPOINT
+        }:${process.env.MINIO_PORT}/${process.env.MINIO_BUCKET}/${fileName}`,
       };
     } catch (error) {
       console.log(error);
