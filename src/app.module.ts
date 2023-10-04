@@ -5,6 +5,8 @@ import { FileUploadModule } from './file-upload/file-upload.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChatRoomModule } from './chat-room/chat-room.module';
 import { ChatModule } from './chat/chat.module';
+import { FirebaseModule } from './firebase/firebase.module';
+import { NotificationModule } from './notification/notifcation.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ChatModule } from './chat/chat.module';
     FileUploadModule,
     ChatRoomModule,
     ChatModule,
+    FirebaseModule,
+    NotificationModule,
   ],
   controllers: [],
   providers: [],
