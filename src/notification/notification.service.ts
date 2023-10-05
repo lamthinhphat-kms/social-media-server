@@ -32,39 +32,41 @@ export class NotificationService {
     name: string,
     fcmTokens: string[],
   ): Promise<string[]> {
-    return await this.messaging
-      .sendEachForMulticast({
-        tokens: fcmTokens,
-        data: {
-          roomId: messageDto.roomId,
-          userId: messageDto.userId,
-        },
-        notification: {
-          title: `${name} sent a message`,
-          body: messageDto.message,
-        },
-        android: this.android,
-        apns: this.apns,
-      })
-      .then((response) => {
-        if (response.failureCount > 0) {
-          const failedTokens: string[] = [];
-          response.responses.forEach((resp, idx) => {
-            if (!resp.success) {
-              failedTokens.push(fcmTokens[idx]);
-              this.firebaseService.deleteFcmToken(fcmTokens[idx]);
-            }
-          });
-          return failedTokens;
-        } else {
-          return [];
-        }
-      })
-      .catch((err) => {
-        throw new HttpException(
-          `Error sending message: ${err.message}`,
-          HttpStatus.NO_CONTENT,
-        );
-      });
+    if (fcmTokens.length !== 0) {
+      return await this.messaging
+        .sendEachForMulticast({
+          tokens: fcmTokens,
+          data: {
+            roomId: messageDto.roomId,
+            userId: messageDto.userId,
+          },
+          notification: {
+            title: `${name} sent a message`,
+            body: messageDto.message,
+          },
+          android: this.android,
+          apns: this.apns,
+        })
+        .then((response) => {
+          if (response.failureCount > 0) {
+            const failedTokens: string[] = [];
+            response.responses.forEach((resp, idx) => {
+              if (!resp.success) {
+                failedTokens.push(fcmTokens[idx]);
+                this.firebaseService.deleteFcmToken(fcmTokens[idx]);
+              }
+            });
+            return failedTokens;
+          } else {
+            return [];
+          }
+        })
+        .catch((err) => {
+          throw new HttpException(
+            `Error sending message: ${err.message}`,
+            HttpStatus.NO_CONTENT,
+          );
+        });
+    }
   }
 }
