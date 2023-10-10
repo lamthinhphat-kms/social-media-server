@@ -13,7 +13,7 @@ import { NotificationModule } from './notification/notifcation.module';
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
       useFactory: async () => ({
-        uri: 'mongodb://sankar007:sankar007@localhost:27017',
+        uri: `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.DB_HOST}:${process.env.MONGO_PORT}`,
         dbName: 'social_media',
       }),
     }),

@@ -1,24 +1,29 @@
 version: '3'
 
 services:
-  # nestjs-social-media-server:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - '8080:8080'
-  #   environment:
-  #     MINIO_ENDPOINT: host.docker.internal
-  #     MINIO_PORT: 9000
-  #     MINIO_ACCESSKEY: 1t8XEa2lBPFBJCyotJus
-  #     MINIO_SECRETKEY: xvKMSWqteqp4NRi47Pd8cFw3R4R4cU2ddzYAHFoR
-  #     MINIO_BUCKET: social-media
-  #   volumes:
-  #     - ./src:/app/src
-  #   depends_on:
-  #     - minio
-  #   networks:
-  #     - socialmedia
+  nestjs-social-media-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+      - '8001:8001'
+    environment:
+      MINIO_ENDPOINT: host.docker.internal
+      MINIO_PORT: 9000
+      MINIO_ACCESSKEY: 1t8XEa2lBPFBJCyotJus
+      MINIO_SECRETKEY: xvKMSWqteqp4NRi47Pd8cFw3R4R4cU2ddzYAHFoR
+      MINIO_BUCKET: social-media
+      MONGO_INITDB_ROOT_USERNAME: sankar007
+      MONGO_INITDB_ROOT_PASSWORD: sankar007
+      DB_HOST: host.docker.internal
+      MONGO_PORT: 27017
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - minio
+    networks:
+      - socialmedia
 
   mongo:
     image: mongo
