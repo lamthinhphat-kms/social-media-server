@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nestjs-social-media-server
+  name: nestjs-social-media-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nestjs-social-media-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/social-media-socialmedia: "true"
+        io.kompose.service: nestjs-social-media-server
+    spec:
+      containers:
+        - env:
+            - name: DB_HOST
+              value: "10.43.66.25"
+            - name: MINIO_ACCESSKEY
+              value: 1t8XEa2lBPFBJCyotJus
+            - name: MINIO_BUCKET
+              value: social-media
+            - name: MINIO_ENDPOINT
+              value: "172.25.248.11"
+            - name: MINIO_PORT
+              value: "9000"
+            - name: MINIO_SECRETKEY
+              value: xvKMSWqteqp4NRi47Pd8cFw3R4R4cU2ddzYAHFoR
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: sankar007
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: sankar007
+            - name: MONGO_PORT
+              value: "27017"
+          image: lamthinhphat2001/social-media
+          name: nestjs-social-media-server
+          ports:
+            - containerPort: 8002
+              hostPort: 8002
+              protocol: TCP
+            - containerPort: 8001
+              hostPort: 8001
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /app/src
+              name: nestjs-social-media-server-src
+      restartPolicy: Always
+      volumes:
+        - name: nestjs-social-media-server-src
+          hostPath:
+            path: /mnt/d/nestJs/social-media/src
+            type: Directory
+status: {}

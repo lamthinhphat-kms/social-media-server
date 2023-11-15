@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '8080:8080'
+      - '8002:8002'
       - '8001:8001'
     environment:
       MINIO_ENDPOINT: host.docker.internal
