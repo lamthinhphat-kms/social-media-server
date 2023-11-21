@@ -12,9 +12,6 @@ spec:
     - repoURL: https://github.com/lamthinhphat-kms/social-media-server.git
       targetRevision: HEAD
       path: argocd
-    - repoURL: https://github.com/lamthinhphat-kms/social-media-web.git
-      targetRevision: HEAD
-      path: argocd
 
   syncPolicy:
     syncOptions:
