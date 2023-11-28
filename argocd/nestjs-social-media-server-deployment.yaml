@@ -28,7 +28,7 @@ spec:
       containers:
         - env:
             - name: DB_HOST
-              value: "10.43.66.25"
+              value: "10.43.74.222"
             - name: MINIO_ACCESSKEY
               value: 1t8XEa2lBPFBJCyotJus
             - name: MINIO_BUCKET
